@@ -6,25 +6,37 @@ import pandas as pd
 import pickle
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 
-file = open('./data/channel0-results.pkl', "br")
+np.random.seed(10304)
+
+# Load data
+file = open('./data/channel0-preds-trues.pkl', "br")
 data = pickle.load(file)
 
-pdb.set_trace()
+# Pick a subset for plotting
+idx = np.random.choice(np.arange(data['multi_ensemble'].shape[0]),125000)
 
-d = np.zeros((250000*2,10))
-m = np.empty((250000*2,10)).astype(object)
-t = np.zeros((250000*2,10)).astype(object)
+# Get y-true
+y_true = data['y_true'][idx,:]
 
-models = ['AR','multi_ensemble']
-time_samps = ['t+1','t+2']
-for i in models:
-    d[250000*(c):250000*(c+1),0] = data[models[i]]['mae'][0] # samples
-    m[250000*(c):250000*(c+1),0] = np.repeat(models[i],250000) # model
-    t[250000*(c):250000*(c+1),0] = np.repeat('t+1',250000) # time sample
-    
+models = ['AR',\
+            'uni_cnn','multi_cnn','all_cnn',\
+            'uni_lstm','multi_lstm','uni_ensemble',\
+            'multi_ensemble']
+RMSE = np.zeros((idx.shape[0],len(models)))
 
-sns.boxplot(univar_cnn['t+1'])
+for j,i in enumerate(models):
+    preds = data[i][idx,:]
+    RMSE[:,j] = np.sqrt(np.mean((preds-y_true)**2,axis=1))
+
+RMSE_df = pd.DataFrame(RMSE,columns=models)
+
+RMSE_df = RMSE_df.melt(var_name='groups', value_name='vals')
+
+ax = sns.violinplot(x="groups", y="vals", data=RMSE_df)
+
+
 plt.show()
 
 pdb.set_trace()
