@@ -51,11 +51,11 @@ print('DAgostinos test for normality\n \
         variable: RMSE_df[AR]\n\
         p = {}'.format(p))
 
-p = ss.ranksums(RMSE_df['AR'],RMSE_df['uni_ensemble']).pvalue
-print('Wilcoxon rank-sum test p-value between AR and uni_ensemble = {}'.format(p))
+p = ss.wilcoxon(RMSE_df['AR'],RMSE_df['uni_ensemble']).pvalue
+print('Wilcoxon signed rank test p-value between AR and uni_ensemble = {}'.format(p))
 
-p = ss.ranksums(RMSE_df['uni_ensemble'],RMSE_df['multi_ensemble']).pvalue
-print('Wilcoxon rank-sum test p-value between uni_ensemble and multi_ensemble = {}'.format(p))
+p = ss.wilcoxon(RMSE_df['uni_ensemble'],RMSE_df['multi_ensemble']).pvalue
+print('Wilcoxon signed rank test p-value between uni_ensemble and multi_ensemble = {}'.format(p))
 
 print('###################################')
 RMSE_df = RMSE_df.melt(var_name='groups', value_name='vals')
@@ -106,11 +106,11 @@ print('DAgostinos test for normality\n \
         p = {}'.format(p))
        
 
-p = ss.ranksums(RMSE_df['AR-only LFP'],RMSE_df['ens.-only LFP']).pvalue
-print('Wilcoxon rank-sum test p-value between AR and uni_ensemble = {}'.format(p))
+p = ss.wilcoxon(RMSE_df['AR-only LFP'],RMSE_df['ens.-only LFP']).pvalue
+print('Wilcoxon signed rank test p-value between AR and uni_ensemble = {}'.format(p))
 
-p = ss.ranksums(RMSE_df['ens.-only LFP'],RMSE_df['ens.-LFP+FR']).pvalue
-print('Wilcoxon rank-sum test p-value between uni_ensemble and multi_ensemble = {}'.format(p))
+p = ss.wilcoxon(RMSE_df['ens.-only LFP'],RMSE_df['ens.-LFP+FR']).pvalue
+print('Wilcoxon signed rank test p-value between uni_ensemble and multi_ensemble = {}'.format(p))
 
 print('###################################')
 
